@@ -64,17 +64,20 @@ public class Algorithm {
 
         return pathNodeSet;
     }
-    public static ArrayList<Node> sortQue(ArrayList<Node> sort) {   //SORT PRIORITY QUE
+    public static ArrayList<Node> sortQue(ArrayList<Node> sort) {
+        //탐색된 대상 중에서 어떤 노드의 neighbor를 먼저 탐색할 것인가?
         int c = 0;
 
         while(c < sort.size()) {
             int sm = c;
             for(int i = c+1; i < sort.size(); i++) {
+                //현재 노드까지의 hops(현재노드까지 오는데의 cost) 와, 도착지까지 가는데 필요한 예상 cost(Euclidean distance)
                 if(sort.get(i).getEuclidDist(character.getX(), character.getY())+sort.get(i).getHops() <
                         sort.get(sm).getEuclidDist(character.getX(), character.getY())+sort.get(sm).getHops())
                     sm = i;
             }
             if(c != sm) {
+                //Swap이 필요한 경우, swap.
                 Node temp = sort.get(c);
                 sort.set(c, sort.get(sm));
                 sort.set(sm, temp);
@@ -84,10 +87,12 @@ public class Algorithm {
         return sort;
     }
 
-    public static List<Node> backtrack(Node[][] map, int lx, int ly, int hops) {   //BACKTRACK
+    public static List<Node> backtrack(Node[][] map, int lx, int ly, int hops) {
+        //백트레킹 작업. 도착지점으로부터 현재 지점까지의 경로를 탐색한다.
         List<Node> returnNode = new ArrayList<>();
-        while(hops > 1) {   //BACKTRACK FROM THE END OF THE PATH TO THE START
+        while(hops > 1) {  //hops는 시작지점부터 현재지점까지의 소모한 cost이므로 hops만큼 반복.
             Node current = map[lx][ly];
+            current.setType(5);
             returnNode.add(current);
             lx = current.getLastX();
             ly = current.getLastY();
